@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
     try {
         // const user = await prisma.user.findFirst({ where: { email }, include: { donations: { orderBy: { createdAt: 'asc' }, include: { charity: true } }, donatedCharities: true } })
         const user = await prisma.user.findFirst({ where: { email }, include: { donations: { orderBy: { createdAt: 'asc' }, include: { charity: true } }, donatedCharities: true } })
-        console.log(user)
+        // console.log(user)
         if (user) {
             const users = await prisma.user.findMany({ orderBy: { total_donated: 'desc' } })
             let ranking = users.findIndex(aUser => aUser.email === email) + 1
