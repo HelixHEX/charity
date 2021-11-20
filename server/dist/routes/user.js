@@ -21,7 +21,6 @@ router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let { email } = query;
     try {
         const user = yield prisma.user.findFirst({ where: { email }, include: { donations: { orderBy: { createdAt: 'asc' }, include: { charity: true } }, donatedCharities: true } });
-        console.log(user);
         if (user) {
             const users = yield prisma.user.findMany({ orderBy: { total_donated: 'desc' } });
             let ranking = users.findIndex(aUser => aUser.email === email) + 1;
