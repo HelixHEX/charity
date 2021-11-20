@@ -8,7 +8,7 @@ const prisma = new PrismaClient()
 
 router.get('/', async (req, res) => {
     const { query } = req;
-    let { email } = query as any
+    let { email, id } = query as any
 
     try {
         // const user = await prisma.user.findFirst({ where: { email }, include: { donations: { orderBy: { createdAt: 'asc' }, include: { charity: true } }, donatedCharities: true } })

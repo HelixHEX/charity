@@ -18,7 +18,7 @@ const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { query } = req;
-    let { email } = query;
+    let { email, id } = query;
     try {
         const user = yield prisma.user.findFirst({ where: { email }, include: { donations: { orderBy: { createdAt: 'asc' }, include: { charity: true } }, donatedCharities: true } });
         if (user) {
