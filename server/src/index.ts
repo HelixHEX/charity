@@ -25,7 +25,7 @@ const main = async () => {
     app.use(express.json());
 
     //cors 
-    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com'] }))
+    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com', 'https://dev.charity.eliaswambugu.com'] }))
 
     //middleware
 
