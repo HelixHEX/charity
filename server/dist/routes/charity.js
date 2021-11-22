@@ -52,7 +52,7 @@ router.post('/create', (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.json({ success: false, error: 'An error has occurred' }).status(400);
     }
 }));
-router.get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/all', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const charities = yield prisma.charity.findMany({ include: { donations: true, likedBy: true }, orderBy: { name: 'asc' } });
         console.log(charities);

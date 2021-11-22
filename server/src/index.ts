@@ -8,6 +8,9 @@ const cors = require('cors')
 
 import morgan from 'morgan'
 
+const cron = require("cron");
+const fetch = require('node-fetch')
+
 //entities
 
 //routes 
@@ -25,7 +28,7 @@ const main = async () => {
     app.use(express.json());
 
     //cors 
-    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com'] }))
+    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com', 'https://dev.charity.eliaswambugu.com'] }))
 
     //middleware
 
@@ -34,13 +37,21 @@ const main = async () => {
         const { body, method, query } = req;
         let session
         if (method === 'GET') {
-            session = query.session as any 
-            session = JSON.parse(session)
+            if (query.session) {
+                session = query.session as any
+                session = JSON.parse(session)
+            } else {
+                if (req.path === '/') {
+                    session = 'default-route'
+                }
+            }
         } else if (method === 'POST') {
             session = body.session
         }
 
-        if (session) {
+        if (session === 'default-route') {
+            next()
+        } else if (session) {
             if (session.user) {
                 next()
             } else {
@@ -52,7 +63,7 @@ const main = async () => {
             res.json({ success: false, error: 'User not logged in' }).status(400)
         }
     }
-    // app.use(validateUser)
+    app.use(validateUser)
 
     //routes
     app.use('/api/v1/user', user)
@@ -67,6 +78,15 @@ const main = async () => {
         res.status(404).json({ status: "404" });
     });
 
+    const cronJob = new cron.CronJob("0 */25 * * * *", () => {
+        fetch(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`)
+            .then((res: any) =>
+                console.log(`response-ok: ${res.ok}, status: ${res.status}`)
+            )
+            .catch((error: any) => console.log(error));
+    });
+
+    cronJob.start();
 
     app.listen(process.env.PORT, () => {
         console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`);

@@ -17,6 +17,8 @@ require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const cors = require('cors');
 const morgan_1 = __importDefault(require("morgan"));
+const cron = require("cron");
+const fetch = require('node-fetch');
 const user = require('./routes/user');
 const charity = require('./routes/charity');
 const donation = require('./routes/donation');
@@ -25,18 +27,28 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     morgan_1.default.token('body', (req, res) => JSON.stringify(req.body));
     app.use((0, morgan_1.default)(":remote-user [:date[clf]] ':method :status :url HTTP/:http-version' :body ':user-agent' - :response-time ms"));
     app.use(express_1.default.json());
-    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com'] }));
+    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com', 'https://dev.charity.eliaswambugu.com'] }));
     const validateUser = (req, res, next) => {
         const { body, method, query } = req;
         let session;
         if (method === 'GET') {
-            session = query.session;
-            session = JSON.parse(session);
+            if (query.session) {
+                session = query.session;
+                session = JSON.parse(session);
+            }
+            else {
+                if (req.path === '/') {
+                    session = 'default-route';
+                }
+            }
         }
         else if (method === 'POST') {
             session = body.session;
         }
-        if (session) {
+        if (session === 'default-route') {
+            next();
+        }
+        else if (session) {
             if (session.user) {
                 next();
             }
@@ -50,6 +62,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
             res.json({ success: false, error: 'User not logged in' }).status(400);
         }
     };
+    app.use(validateUser);
     app.use('/api/v1/user', user);
     app.use('/api/v1/donation', donation);
     app.use('/api/v1/charity', charity);
@@ -59,6 +72,12 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use((_, res) => {
         res.status(404).json({ status: "404" });
     });
+    const cronJob = new cron.CronJob("0 */25 * * * *", () => {
+        fetch(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`)
+            .then((res) => console.log(`response-ok: ${res.ok}, status: ${res.status}`))
+            .catch((error) => console.log(error));
+    });
+    cronJob.start();
     app.listen(process.env.PORT, () => {
         console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`);
     });

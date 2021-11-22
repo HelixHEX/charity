@@ -50,7 +50,7 @@ router.get('/ranking', (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.json({ success: false, error: 'An error has occurred' }).status(400);
     }
 }));
-router.get('/all', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/all', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield prisma.user.findMany({ orderBy: { total_donated: 'desc' }, include: { donations: { orderBy: { createdAt: 'desc' } }, donatedCharities: true } });
         console.log(users);

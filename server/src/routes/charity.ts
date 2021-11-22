@@ -40,7 +40,7 @@ router.post('/create', async (req: express.Request, res: express.Response) => {
     }
 })
 
-router.get('/all', async (req, res) => {
+router.get('/all', async (_, res) => {
     try {
         const charities = await prisma.charity.findMany({ include: { donations: true, likedBy: true }, orderBy: {name: 'asc'} })
         console.log(charities)
