@@ -43,7 +43,7 @@ router.get('/ranking', async (req, res) => {
     }
 })
 
-router.get('/all', async (req, res) => {
+router.get('/all', async (_, res) => {
     try {
         const users = await prisma.user.findMany({ orderBy: { total_donated: 'desc' }, include: { donations: { orderBy: { createdAt: 'desc' } }, donatedCharities: true } })
         console.log(users)
