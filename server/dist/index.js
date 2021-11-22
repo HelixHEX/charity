@@ -18,6 +18,7 @@ const express_1 = __importDefault(require("express"));
 const cors = require('cors');
 const morgan_1 = __importDefault(require("morgan"));
 const cron = require("cron");
+const fetch = require('node-fetch');
 const user = require('./routes/user');
 const charity = require('./routes/charity');
 const donation = require('./routes/donation');
@@ -31,13 +32,23 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         const { body, method, query } = req;
         let session;
         if (method === 'GET') {
-            session = query.session;
-            session = JSON.parse(session);
+            if (query.session) {
+                session = query.session;
+                session = JSON.parse(session);
+            }
+            else {
+                if (req.path === '/') {
+                    session = 'default-route';
+                }
+            }
         }
         else if (method === 'POST') {
             session = body.session;
         }
-        if (session) {
+        if (session === 'default-route') {
+            next();
+        }
+        else if (session) {
             if (session.user) {
                 next();
             }

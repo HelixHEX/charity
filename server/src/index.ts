@@ -9,6 +9,7 @@ const cors = require('cors')
 import morgan from 'morgan'
 
 const cron = require("cron");
+const fetch = require('node-fetch')
 
 //entities
 
@@ -36,13 +37,21 @@ const main = async () => {
         const { body, method, query } = req;
         let session
         if (method === 'GET') {
-            session = query.session as any 
-            session = JSON.parse(session)
+            if (query.session) {
+                session = query.session as any
+                session = JSON.parse(session)
+            } else {
+                if (req.path === '/') {
+                    session = 'default-route'
+                }
+            }
         } else if (method === 'POST') {
             session = body.session
         }
 
-        if (session) {
+        if (session === 'default-route') {
+            next()
+        } else if (session) {
             if (session.user) {
                 next()
             } else {
@@ -71,13 +80,13 @@ const main = async () => {
 
     const cronJob = new cron.CronJob("0 */25 * * * *", () => {
         fetch(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`)
-          .then((res:any) =>
-            console.log(`response-ok: ${res.ok}, status: ${res.status}`)
-          )
-          .catch((error:any) => console.log(error));
-      });
-    
-      cronJob.start();
+            .then((res: any) =>
+                console.log(`response-ok: ${res.ok}, status: ${res.status}`)
+            )
+            .catch((error: any) => console.log(error));
+    });
+
+    cronJob.start();
 
     app.listen(process.env.PORT, () => {
         console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`);
