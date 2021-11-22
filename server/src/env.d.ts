@@ -3,6 +3,6 @@ declare namespace NodeJS {
       DATABASE_URL: string;
       PORT: number;
       ADMIN: string;
-      PROD_URL: string;
+      HEROKU_APP_NAME: string;
     }
   }

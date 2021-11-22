@@ -62,7 +62,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         res.status(404).json({ status: "404" });
     });
     const cronJob = new cron.CronJob("0 */25 * * * *", () => {
-        fetch(process.env.PROD_URL)
+        fetch(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`)
             .then((res) => console.log(`response-ok: ${res.ok}, status: ${res.status}`))
             .catch((error) => console.log(error));
     });

@@ -70,7 +70,7 @@ const main = async () => {
     });
 
     const cronJob = new cron.CronJob("0 */25 * * * *", () => {
-        fetch(process.env.PROD_URL)
+        fetch(`https://${process.env.HEROKU_APP_NAME}.herokuapp.com`)
           .then((res:any) =>
             console.log(`response-ok: ${res.ok}, status: ${res.status}`)
           )
