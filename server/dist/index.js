@@ -27,7 +27,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     morgan_1.default.token('body', (req, res) => JSON.stringify(req.body));
     app.use((0, morgan_1.default)(":remote-user [:date[clf]] ':method :status :url HTTP/:http-version' :body ':user-agent' - :response-time ms"));
     app.use(express_1.default.json());
-    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com', 'https://dev.charity.eliaswambugu.com'] }));
+    app.use(cors({ origin: ['*'] }));
     const validateUser = (req, res, next) => {
         const { body, method, query } = req;
         let session;
