@@ -27,9 +27,18 @@ const main = async () => {
 
     app.use(express.json());
 
+    // app.use(function (_, res, next) {
+
+    //     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8888');
+    //     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    //     res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    //     // @ts-ignore
+    //     res.setHeader('Access-Control-Allow-Credentials', true);
+    //     next();
+    // });
     //cors 
-    // app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com', 'https://dev.charity.eliaswambugu.com'] }))
-    app.use(cors({origin: ['*']}))
+    app.use(cors({ origin: ['http://localhost:3000', 'https://charity.eliaswambugu.com', 'https://dev.charity.eliaswambugu.com'] }))
+    // app.use(cors({origin: ['*']}))
     //middleware
 
 
