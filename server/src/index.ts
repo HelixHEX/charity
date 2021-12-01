@@ -78,7 +78,7 @@ const main = async () => {
         res.status(404).json({ status: "404" });
     });
 
-    const cronJob = new cron.CronJob("0 */25 * * * *", () => {
+    const cronJob = new cron.CronJob("0 */10 * * * *", () => {
         fetch(`${process.env.HEROKU_APP_NAME}`)
             .then((res: any) =>
                 console.log(`response-ok: ${res.ok}, status: ${res.status}`)
