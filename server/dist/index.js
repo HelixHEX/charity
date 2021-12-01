@@ -18,7 +18,6 @@ const express_1 = __importDefault(require("express"));
 const cors = require('cors');
 const morgan_1 = __importDefault(require("morgan"));
 const cron = require("cron");
-const fetch = require('node-fetch');
 const user = require('./routes/user');
 const charity = require('./routes/charity');
 const donation = require('./routes/donation');
