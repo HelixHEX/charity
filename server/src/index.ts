@@ -10,7 +10,7 @@ import morgan from 'morgan'
 
 const cron = require("cron");
 // const fetch = require('node-fetch')
-// import fetch from 'node-fetch'
+import fetch from 'node-fetch'
 //entities
 
 //routes 
