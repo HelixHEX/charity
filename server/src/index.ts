@@ -8,9 +8,9 @@ const cors = require('cors')
 
 import morgan from 'morgan'
 
-const cron = require("cron");
+// const cron = require("cron");
 // const fetch = require('node-fetch')
-import fetch from 'node-fetch'
+// import fetch from 'node-fetch'
 //entities
 
 //routes 
@@ -78,15 +78,15 @@ const main = async () => {
         res.status(404).json({ status: "404" });
     });
 
-    const cronJob = new cron.CronJob("0 */10 * * * *", () => {
-        fetch(`${process.env.HEROKU_APP_NAME}`)
-            .then((res: any) =>
-                console.log(`response-ok: ${res.ok}, status: ${res.status}`)
-            )
-            .catch((error: any) => console.log(error));
-    });
+    // const cronJob = new cron.CronJob("0 */10 * * * *", () => {
+    //     fetch(`${process.env.HEROKU_APP_NAME}`)
+    //         .then((res: any) =>
+    //             console.log(`response-ok: ${res.ok}, status: ${res.status}`)
+    //         )
+    //         .catch((error: any) => console.log(error));
+    // });
 
-    cronJob.start();
+    // cronJob.start();
 
     app.listen(process.env.PORT, () => {
         console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`);

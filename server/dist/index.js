@@ -17,7 +17,6 @@ require("reflect-metadata");
 const express_1 = __importDefault(require("express"));
 const cors = require('cors');
 const morgan_1 = __importDefault(require("morgan"));
-const cron = require("cron");
 const user = require('./routes/user');
 const charity = require('./routes/charity');
 const donation = require('./routes/donation');
@@ -71,12 +70,6 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.use((_, res) => {
         res.status(404).json({ status: "404" });
     });
-    const cronJob = new cron.CronJob("0 */10 * * * *", () => {
-        fetch(`${process.env.HEROKU_APP_NAME}`)
-            .then((res) => console.log(`response-ok: ${res.ok}, status: ${res.status}`))
-            .catch((error) => console.log(error));
-    });
-    cronJob.start();
     app.listen(process.env.PORT, () => {
         console.log(`🚀 Server ready at http://localhost:${process.env.PORT}`);
     });
